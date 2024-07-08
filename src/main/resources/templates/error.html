@@ -1,0 +1,16 @@
+<!-- src/main/resources/templates/error.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Error</title>
+</head>
+<body>
+<h1>Something went wrong! Check the inventory of the associated part.</h1>
+<p th:text="${message}"></p>
+<p th:text="${error}"></p>
+<p th:text="${path}"></p>
+<a href="/">Go to Home</a>
+</body>
+</html>

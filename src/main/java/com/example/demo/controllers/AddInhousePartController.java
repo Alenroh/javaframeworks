@@ -37,12 +37,17 @@ public class AddInhousePartController{
     }
 
     @PostMapping("/showFormAddInPart")
-    public String submitForm(@Valid @ModelAttribute("inhousepart") InhousePart part, BindingResult theBindingResult, Model theModel){
+    public String submitForm(@Valid @ModelAttribute("inhousepart") InhousePart part, BindingResult theBindingResult, Model theModel, int min,int max,int id, int inv) {
         theModel.addAttribute("inhousepart",part);
+
         if(theBindingResult.hasErrors()){
             return "InhousePartForm";
         }
         else{
+            part.setInv(inv);
+            part.setMin(min);
+            part.setMax(max);
+            part.setPartId(id);
         InhousePartService repo=context.getBean(InhousePartServiceImpl.class);
         InhousePart ip=repo.findById((int)part.getId());
         if(ip!=null)part.setProducts(ip.getProducts());

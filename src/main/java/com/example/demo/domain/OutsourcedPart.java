@@ -13,6 +13,7 @@ import javax.persistence.Entity;
 @DiscriminatorValue("2")
 public class OutsourcedPart extends Part{
 String companyName;
+int partId;
 
     public OutsourcedPart() {
     }
@@ -24,4 +25,11 @@ String companyName;
     public void setCompanyName(String companyName) {
         this.companyName = companyName;
     }
+
+    public int getPartId() {
+    return partId;
+}
+    public void setPartId(int partId) {
+    this.partId = partId;
+}
 }
