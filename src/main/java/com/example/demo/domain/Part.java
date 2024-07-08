@@ -1,6 +1,7 @@
 package com.example.demo.domain;
 
 import com.example.demo.validators.ValidDeletePart;
+import com.example.demo.validators.ValidProductOrPart;
 
 import javax.persistence.*;
 import javax.validation.constraints.Min;
@@ -19,6 +20,7 @@ import java.util.Set;
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name="part_type",discriminatorType = DiscriminatorType.INTEGER)
 @Table(name="Parts")
+@ValidProductOrPart
 public abstract class Part implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -28,7 +30,10 @@ public abstract class Part implements Serializable {
     double price;
     @Min(value = 0, message = "Inventory value must be positive")
     int inv;
-
+    @Min(value = 0, message = "Min value must be positive")
+    int min;
+    @Min(value = 0, message = "Max value must be positive")
+    int max;
     @ManyToMany
     @JoinTable(name="product_part", joinColumns = @JoinColumn(name="part_id"),
             inverseJoinColumns=@JoinColumn(name="product_id"))
@@ -48,6 +53,14 @@ public abstract class Part implements Serializable {
         this.name = name;
         this.price = price;
         this.inv = inv;
+    }
+    public Part(long id, String name, double price, int inv, int max, int min) {
+        this.id = id;
+        this.name = name;
+        this.price = price;
+        this.inv = inv;
+        this.min = min;
+        this.max = max;
     }
 
     public long getId() {
@@ -70,6 +83,10 @@ public abstract class Part implements Serializable {
         return price;
     }
 
+    public void setMin(int min) {this.min = min; }
+
+    public void setMax(int max) {this.max = max; }
+
     public void setPrice(double price) {
         this.price = price;
     }
@@ -85,6 +102,10 @@ public abstract class Part implements Serializable {
     public Set<Product> getProducts() {
         return products;
     }
+
+    public int getMin() { return min; }
+
+    public int getMax() { return max; }
 
     public void setProducts(Set<Product> products) {
         this.products = products;
