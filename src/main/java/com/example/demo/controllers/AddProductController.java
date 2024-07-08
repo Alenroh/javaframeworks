@@ -17,12 +17,6 @@ import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- *
- *
- *
- *
- */
 @Controller
 public class AddProductController {
     @Autowired
@@ -47,7 +41,6 @@ public class AddProductController {
         theModel.addAttribute("assparts",product.getParts());
         return "productForm";
     }
-
     @PostMapping("/showFormAddProduct")
     public String submitForm(@Valid @ModelAttribute("product") Product product, BindingResult bindingResult, Model theModel) {
         theModel.addAttribute("product", product);
@@ -69,9 +62,6 @@ public class AddProductController {
             theModel.addAttribute("assparts",product2.getParts());
             return "productForm";
         }
- //       theModel.addAttribute("assparts", assparts);
- //       this.product=product;
-//        product.getParts().addAll(assparts);
         else {
             ProductService repo = context.getBean(ProductServiceImpl.class);
             if(product.getId()!=0) {
@@ -111,7 +101,19 @@ public class AddProductController {
         //send over to our form
         return "productForm";
     }
+    @PostMapping("/buyproduct")
+    public String buyProduct(@RequestParam("productID") int theId, Model theModel) {
+        ProductService productService = context.getBean(ProductServiceImpl.class);
+        Product product2 = productService.findById(theId);
+        int productinv = product2.getInv();
 
+        if (productinv > 0) {
+            product2.setInv(productinv - 1);
+            productService.save(product2);
+            return "buysuccess";
+        } else {
+            return "buyfailure";
+        }}
     @GetMapping("/deleteproduct")
     public String deleteProduct(@RequestParam("productID") int theId, Model theModel) {
         ProductService productService = context.getBean(ProductServiceImpl.class);
@@ -131,7 +133,6 @@ public class AddProductController {
         this.partService = partService;
     }
 // make the add and remove buttons work
-
     @GetMapping("/associatepart")
     public String associatePart(@Valid @RequestParam("partID") int theID, Model theModel){
     //    theModel.addAttribute("product", product);
